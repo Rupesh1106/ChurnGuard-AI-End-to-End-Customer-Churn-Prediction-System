@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Customer Analytics Dashboard - ChurnGuard AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&amp;family=Hanken+Grotesk:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#663e00",
+                        "on-secondary": "#44176f",
+                        "tertiary-container": "#ca8012",
+                        "on-secondary-container": "#d0a1ff",
+                        "surface-container": "#1e1e2f",
+                        "inverse-surface": "#e3e0f8",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-primary-fixed-variant": "#1f3ba6",
+                        "secondary-fixed": "#f0dbff",
+                        "neon-purple": "#bd00ff",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "success-glow": "#00ffa3",
+                        "neon-blue": "#00d2ff",
+                        "outline": "#8f909e",
+                        "surface-variant": "#333345",
+                        "surface-container-low": "#1a1a2b",
+                        "on-primary-fixed": "#001356",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffddb9",
+                        "surface-container-highest": "#333345",
+                        "on-tertiary-fixed": "#2b1700",
+                        "primary": "#b9c3ff",
+                        "on-secondary-fixed-variant": "#5c3187",
+                        "secondary": "#dcb8ff",
+                        "secondary-container": "#5c3187",
+                        "tertiary": "#ffb964",
+                        "surface-bright": "#38374a",
+                        "primary-container": "#7189f6",
+                        "on-primary-container": "#001e78",
+                        "inverse-on-surface": "#2f2f40",
+                        "secondary-fixed-dim": "#dcb8ff",
+                        "surface-container-high": "#29283a",
+                        "on-surface": "#e3e0f8",
+                        "outline-variant": "#444653",
+                        "on-error": "#690005",
+                        "surface-tint": "#b9c3ff",
+                        "on-surface-variant": "#c5c5d5",
+                        "on-tertiary": "#472a00",
+                        "on-secondary-fixed": "#2c0051",
+                        "danger-pulse": "#ff2e63",
+                        "surface-container-lowest": "#0c0c1d",
+                        "primary-fixed": "#dde1ff",
+                        "background": "#121222",
+                        "on-primary": "#002388",
+                        "on-tertiary-container": "#3e2400",
+                        "border-glass": "rgba(255, 255, 255, 0.1)",
+                        "surface-glass": "rgba(255, 255, 255, 0.03)",
+                        "surface": "#121222",
+                        "surface-dim": "#121222",
+                        "inverse-primary": "#3c55bf",
+                        "tertiary-fixed-dim": "#ffb964",
+                        "on-background": "#e3e0f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-md": ["Sora"],
+                        "display-lg-mobile": ["Sora"],
+                        "data-mono": ["JetBrains Mono"],
+                        "body-md": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Sora"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .glass-border-gradient {
+            border-image: linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(255,255,255,0.05)) 1;
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px rgba(185, 195, 255, 0.4);
+        }
+        .neon-glow-blue {
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+        }
+        .neon-glow-danger {
+            box-shadow: 0 0 15px rgba(255, 46, 99, 0.4);
+        }
+        .neon-glow-success {
+            box-shadow: 0 0 15px rgba(0, 255, 163, 0.4);
+        }
+        /* Pulse Animation */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            80%, 100% { transform: scale(1.5); opacity: 0; }
+        }
+        .pulse-indicator::before {
+            content: '';
+            position: absolute;
+            left: -4px; top: -4px; right: -4px; bottom: -4px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        /* Custom Scrollbar for tables */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center w-full px-margin-desktop py-4 sticky top-0 z-50 bg-surface-glass dark:bg-surface-glass backdrop-blur-xl border-b border-glass shadow-none">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<img alt="ChurnGuard AI Logo" class="w-8 h-8 rounded-md" src="https://lh3.googleusercontent.com/aida/AP1WRLtZpo1eBY9Y9PZnhZOAzpvK7hoL9bfq8zzNcKNzPWOTamNH56lZpDc_ymsT0Wt8R3hio1sTIjePs7DaPYtw68mqALTJPmBZUY494ndNL04hRx0Bf_eRqapz4dWR_th27Ugd-gBxX1iHivjTSmOkT9xGpSGTNjidu1UIwKxLyPSqrJ5Js7ksgh69hh6BnfeZoY0vlWSeF3rZ1lUotc3xMI4a1FLCCXTmPx2Ue6UVJeZfM-NSds5letFB3Tc"/>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary tracking-tight">ChurnGuard AI</span>
+</div>
+<!-- Search on left -->
+<div class="hidden lg:flex items-center bg-surface-container-high border border-glass rounded-full px-4 py-1.5 focus-within:border-primary transition-colors w-64">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2" style="font-variation-settings: 'FILL' 0;">search</span>
+<input class="bg-transparent border-none text-data-mono text-sm focus:ring-0 w-full placeholder-on-surface-variant text-on-surface" placeholder="Search analytics..." type="text"/>
+</div>
+</div>
+<ul class="hidden md:flex items-center gap-8 font-body-md text-body-md">
+<li><a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 px-3 py-2 rounded-md duration-200" href="index.html">Home</a></li>
+<li><a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 px-3 py-2 rounded-md duration-200" href="predict.html">Predict</a></li>
+<li><a class="text-primary dark:text-primary font-bold border-b-2 border-primary pb-1" href="analytics.html">Analytics</a></li>
+<li><a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-variant/50 px-3 py-2 rounded-md duration-200" href="index.html#about">About</a></li>
+</ul>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-variant/50 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-variant/50 active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</div>
+<button class="bg-gradient-to-r from-primary-container to-secondary-container text-on-primary-container font-label-caps text-label-caps px-4 py-2 rounded-md hover:shadow-[0_0_15px_rgba(0,210,255,0.4)] transition-all active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 0;">upload</span>
+                Upload CSV
+            </button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-glass overflow-hidden flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a corporate data analyst in a dark futuristic office setting with soft blue ambient lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6wZYTKPQXHc2CsSQCMIk_t-cSL2SsNPiPFWzketIBd3YWGv2RaGoKhfoS_MgtfKh_v7FiSXXDKXVvKOIqzkObuD7k_ZgRWIxSUfY5Q8zmtf1LF3u2bZEjGNXPC4vZ6hxlVabfbyV11ka5SXGL7B1NuVzgtL49-OBAxU9YfmOu5pFRpe-4B0suBjd2vlJtwpMOFnjwtaFlOGyWXMz0ImGYN23BrXgV-4gLkBY6OTbHWp47dB2X01SqMnukjLO8JXqmWF_Bp2Ei_7U"/>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow px-margin-mobile md:px-margin-desktop py-8 max-w-[container-max] mx-auto w-full space-y-8">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+<div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">Customer Analytics</h1>
+<p class="text-on-surface-variant text-body-lg mt-2 flex items-center gap-2">
+<span class="relative inline-flex h-2 w-2 rounded-full bg-success-glow pulse-indicator"></span>
+                    Live Data Processing
+                </p>
+</div>
+<div class="flex gap-3">
+<select class="bg-surface-container border border-glass text-data-mono text-on-surface rounded-md px-4 py-2 focus:ring-primary focus:border-primary">
+<option>Last 30 Days</option>
+<option>Last Quarter</option>
+<option>Year to Date</option>
+</select>
+</div>
+</header>
+<!-- KPI Metrics Row -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Total Customers -->
+<div class="glass-card p-6 rounded-xl flex flex-col relative overflow-hidden group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Total Customers</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">group</span>
+</div>
+</div>
+<div class="font-headline-md text-[32px] font-bold text-on-surface mb-2">7,043</div>
+<div class="flex items-center gap-2 text-data-mono text-sm mt-auto">
+<span class="text-success-glow flex items-center"><span class="material-symbols-outlined text-[14px]">trending_up</span> +2.4%</span>
+<span class="text-on-surface-variant">vs last month</span>
+</div>
+<!-- Abstract sparkline -->
+<div class="absolute bottom-0 left-0 w-full h-12 opacity-30 group-hover:opacity-60 transition-opacity">
+<svg class="w-full h-full stroke-primary fill-none" preserveaspectratio="none" stroke-width="2" viewbox="0 0 100 30">
+<path d="M0,25 Q10,20 20,25 T40,15 T60,20 T80,5 T100,10"></path>
+<path class="fill-primary/20 stroke-none" d="M0,25 Q10,20 20,25 T40,15 T60,20 T80,5 T100,10 L100,30 L0,30 Z"></path>
+</svg>
+</div>
+</div>
+<!-- Churn Rate -->
+<div class="glass-card p-6 rounded-xl flex flex-col relative overflow-hidden group hover:border-danger-pulse transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Churn Rate</span>
+<div class="w-8 h-8 rounded-full bg-error-container/30 flex items-center justify-center text-danger-pulse neon-glow-danger">
+<span class="material-symbols-outlined text-[18px]">trending_down</span>
+</div>
+</div>
+<div class="font-headline-md text-[32px] font-bold text-on-surface mb-2">26.5%</div>
+<div class="flex items-center gap-2 text-data-mono text-sm mt-auto">
+<span class="text-danger-pulse flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_upward</span> +1.2%</span>
+<span class="text-on-surface-variant">Requires attention</span>
+</div>
+<!-- Abstract sparkline red -->
+<div class="absolute bottom-0 left-0 w-full h-12 opacity-30 group-hover:opacity-60 transition-opacity">
+<svg class="w-full h-full stroke-danger-pulse fill-none" preserveaspectratio="none" stroke-width="2" viewbox="0 0 100 30">
+<path d="M0,10 Q15,15 30,5 T60,20 T80,15 T100,5"></path>
+<path class="fill-danger-pulse/20 stroke-none" d="M0,10 Q15,15 30,5 T60,20 T80,15 T100,5 L100,30 L0,30 Z"></path>
+</svg>
+</div>
+</div>
+<!-- Monthly Revenue -->
+<div class="glass-card p-6 rounded-xl flex flex-col relative overflow-hidden group hover:border-success-glow transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Monthly Revenue</span>
+<div class="w-8 h-8 rounded-full bg-success-glow/10 flex items-center justify-center text-success-glow neon-glow-success">
+<span class="material-symbols-outlined text-[18px]">attach_money</span>
+</div>
+</div>
+<div class="font-headline-md text-[32px] font-bold text-on-surface mb-2">$456K</div>
+<div class="flex items-center gap-2 text-data-mono text-sm mt-auto">
+<span class="text-success-glow flex items-center"><span class="material-symbols-outlined text-[14px]">trending_up</span> +5.8%</span>
+<span class="text-on-surface-variant">Steady growth</span>
+</div>
+<!-- Abstract sparkline green -->
+<div class="absolute bottom-0 left-0 w-full h-12 opacity-30 group-hover:opacity-60 transition-opacity">
+<svg class="w-full h-full stroke-success-glow fill-none" preserveaspectratio="none" stroke-width="2" viewbox="0 0 100 30">
+<path d="M0,28 Q10,25 20,20 T40,22 T60,10 T80,15 T100,2"></path>
+<path class="fill-success-glow/20 stroke-none" d="M0,28 Q10,25 20,20 T40,22 T60,10 T80,15 T100,2 L100,30 L0,30 Z"></path>
+</svg>
+</div>
+</div>
+<!-- Avg Tenure -->
+<div class="glass-card p-6 rounded-xl flex flex-col relative overflow-hidden group hover:border-neon-blue transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Avg Tenure</span>
+<div class="w-8 h-8 rounded-full bg-neon-blue/10 flex items-center justify-center text-neon-blue neon-glow-blue">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+</div>
+</div>
+<div class="font-headline-md text-[32px] font-bold text-on-surface mb-2">32 <span class="text-body-lg text-on-surface-variant">mo</span></div>
+<div class="flex items-center gap-2 text-data-mono text-sm mt-auto">
+<span class="text-outline flex items-center"><span class="material-symbols-outlined text-[14px]">horizontal_rule</span> 0%</span>
+<span class="text-on-surface-variant">Stable</span>
+</div>
+<!-- Abstract sparkline blue -->
+<div class="absolute bottom-0 left-0 w-full h-12 opacity-30 group-hover:opacity-60 transition-opacity">
+<svg class="w-full h-full stroke-neon-blue fill-none" preserveaspectratio="none" stroke-width="2" viewbox="0 0 100 30">
+<path d="M0,15 Q25,14 50,15 T100,16"></path>
+<path class="fill-neon-blue/20 stroke-none" d="M0,15 Q25,14 50,15 T100,16 L100,30 L0,30 Z"></path>
+</svg>
+</div>
+</div>
+</section>
+<!-- Main Charts Row -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Donut Chart -->
+<div class="glass-card p-6 rounded-xl col-span-1 flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Churn Distribution</h3>
+<div class="relative flex-grow flex items-center justify-center min-h-[250px]">
+<!-- CSS simulated 3D Donut -->
+<div class="relative w-48 h-48 rounded-full" style="background: conic-gradient(var(--tw-colors-neon-purple) 0% 26.5%, rgba(255,255,255,0.05) 26.5% 100%); box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.3);">
+<div class="absolute inset-2 rounded-full bg-background flex flex-col items-center justify-center shadow-[inset_0_5px_15px_rgba(0,0,0,0.5)]">
+<span class="font-data-mono text-sm text-on-surface-variant">Total</span>
+<span class="font-headline-md text-2xl text-on-surface">7,043</span>
+</div>
+</div>
+</div>
+<div class="flex justify-center gap-6 mt-4">
+<div class="flex items-center gap-2 text-data-mono text-sm">
+<div class="w-3 h-3 rounded-full bg-neon-purple"></div>
+<span class="text-on-surface-variant">Churned (26.5%)</span>
+</div>
+<div class="flex items-center gap-2 text-data-mono text-sm">
+<div class="w-3 h-3 rounded-full bg-surface-variant border border-glass"></div>
+<span class="text-on-surface-variant">Retained (73.5%)</span>
+</div>
+</div>
+</div>
+<!-- Bar Chart -->
+<div class="glass-card p-6 rounded-xl col-span-1 lg:col-span-2 flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Churn by Contract Type</h3>
+<div class="flex-grow relative min-h-[250px] flex items-end justify-around pb-6 border-b border-glass px-4">
+<!-- Y Axis Labels -->
+<div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-data-mono text-xs text-on-surface-variant">
+<span>40%</span>
+<span>30%</span>
+<span>20%</span>
+<span>10%</span>
+<span>0%</span>
+</div>
+<!-- Grid Lines -->
+<div class="absolute inset-0 bottom-6 left-8 flex flex-col justify-between pointer-events-none">
+<div class="w-full border-t border-glass opacity-30"></div>
+<div class="w-full border-t border-glass opacity-30"></div>
+<div class="w-full border-t border-glass opacity-30"></div>
+<div class="w-full border-t border-glass opacity-30"></div>
+<div class="w-full border-t border-glass opacity-30"></div>
+</div>
+<!-- Bars -->
+<div class="relative w-16 h-[80%] bg-gradient-to-t from-primary/20 to-primary rounded-t-md group z-10">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-high px-2 py-1 rounded text-data-mono text-xs text-on-surface pointer-events-none">42.7%</div>
+<div class="absolute -bottom-6 w-full text-center text-data-mono text-xs text-on-surface-variant">Month-to-month</div>
+</div>
+<div class="relative w-16 h-[30%] bg-gradient-to-t from-secondary/20 to-secondary rounded-t-md group z-10">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-high px-2 py-1 rounded text-data-mono text-xs text-on-surface pointer-events-none">11.2%</div>
+<div class="absolute -bottom-6 w-full text-center text-data-mono text-xs text-on-surface-variant">One year</div>
+</div>
+<div class="relative w-16 h-[10%] bg-gradient-to-t from-neon-blue/20 to-neon-blue rounded-t-md group z-10">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-high px-2 py-1 rounded text-data-mono text-xs text-on-surface pointer-events-none">2.8%</div>
+<div class="absolute -bottom-6 w-full text-center text-data-mono text-xs text-on-surface-variant">Two year</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Customer Data Explorer (Reduced scope for 0.25 effort) -->
+<section class="glass-card rounded-xl overflow-hidden flex flex-col border border-glass">
+<div class="p-6 border-b border-glass flex justify-between items-center bg-surface-glass">
+<h3 class="font-headline-md text-headline-md text-on-surface">Customer Data Explorer</h3>
+<div class="flex gap-4">
+<div class="flex items-center bg-surface-container border border-glass rounded-md px-3 py-1 focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none text-data-mono text-sm focus:ring-0 w-32 placeholder-on-surface-variant text-on-surface" placeholder="Search ID..." type="text"/>
+</div>
+<button class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-md text-sm flex items-center gap-1 hover:text-on-surface hover:bg-surface-container transition-colors border border-glass">
+<span class="material-symbols-outlined text-sm">filter_list</span> Filter
+                    </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse font-data-mono text-sm">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant border-b border-glass">
+<th class="p-4 font-medium">Customer ID</th>
+<th class="p-4 font-medium">Tenure</th>
+<th class="p-4 font-medium">Monthly Charges</th>
+<th class="p-4 font-medium">Contract</th>
+<th class="p-4 font-medium">Status</th>
+<th class="p-4 font-medium text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-glass text-on-surface">
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="p-4">7590-VHVEG</td>
+<td class="p-4">1 mo</td>
+<td class="p-4">$29.85</td>
+<td class="p-4">Month-to-month</td>
+<td class="p-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-danger-pulse/10 text-danger-pulse border border-danger-pulse/20">Churned</span></td>
+<td class="p-4 text-right"><button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-sm">chevron_right</span></button></td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="p-4">5575-GNVDE</td>
+<td class="p-4">34 mo</td>
+<td class="p-4">$56.95</td>
+<td class="p-4">One year</td>
+<td class="p-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-success-glow/10 text-success-glow border border-success-glow/20">Retained</span></td>
+<td class="p-4 text-right"><button class="text-primary hover:text-secondary"><span class="material-symbols-outlined text-sm">chevron_right</span></button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-8 px-margin-desktop mt-auto flex flex-col md:flex-row justify-between items-center gap-gutter bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-glass">
+<span class="font-label-caps text-label-caps text-primary">© 2024 ChurnGuard AI. Predictive Intelligence for Enterprise.</span>
+<div class="flex gap-6 font-data-mono text-data-mono">
+<a class="text-outline hover:text-neon-blue transition-colors" href="#">Privacy Policy</a>
+<a class="text-outline hover:text-neon-blue transition-colors" href="#">Terms of Service</a>
+<a class="text-outline hover:text-neon-blue transition-colors" href="#">API Documentation</a>
+<a class="text-outline hover:text-neon-blue transition-colors" href="#">Support</a>
+</div>
+</footer>
+</body></html>

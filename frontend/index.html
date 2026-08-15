@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ChurnGuard AI - Predict Customer Churn Before It Happens</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Sora:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#b9c3ff",
+                        "on-primary": "#002388",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#2b1700",
+                        "on-tertiary-fixed-variant": "#663e00",
+                        "on-surface": "#e3e0f8",
+                        "surface-tint": "#b9c3ff",
+                        "surface-bright": "#38374a",
+                        "surface-dim": "#121222",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-secondary-fixed-variant": "#5c3187",
+                        "on-error": "#690005",
+                        "on-primary-fixed": "#001356",
+                        "primary-fixed": "#dde1ff",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#001e78",
+                        "on-primary-fixed-variant": "#1f3ba6",
+                        "on-secondary-container": "#d0a1ff",
+                        "secondary-container": "#5c3187",
+                        "surface-container-low": "#1a1a2b",
+                        "inverse-surface": "#e3e0f8",
+                        "secondary-fixed-dim": "#dcb8ff",
+                        "on-secondary": "#44176f",
+                        "surface-container": "#1e1e2f",
+                        "outline": "#8f909e",
+                        "on-tertiary": "#472a00",
+                        "error-container": "#93000a",
+                        "tertiary": "#ffb964",
+                        "surface-variant": "#333345",
+                        "inverse-primary": "#3c55bf",
+                        "tertiary-container": "#ca8012",
+                        "primary-container": "#7189f6",
+                        "inverse-on-surface": "#2f2f40",
+                        "neon-blue": "#00d2ff",
+                        "surface-glass": "rgba(255, 255, 255, 0.03)",
+                        "tertiary-fixed-dim": "#ffb964",
+                        "on-background": "#e3e0f8",
+                        "on-tertiary-container": "#3e2400",
+                        "surface": "#121222",
+                        "on-secondary-fixed": "#2c0051",
+                        "secondary-fixed": "#f0dbff",
+                        "tertiary-fixed": "#ffddb9",
+                        "secondary": "#dcb8ff",
+                        "outline-variant": "#444653",
+                        "surface-container-lowest": "#0c0c1d",
+                        "background": "#121222",
+                        "success-glow": "#00ffa3",
+                        "surface-container-high": "#29283a",
+                        "on-surface-variant": "#c5c5d5",
+                        "surface-container-highest": "#333345",
+                        "danger-pulse": "#ff2e63",
+                        "border-glass": "rgba(255, 255, 255, 0.1)",
+                        "neon-purple": "#bd00ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "data-mono": ["JetBrains Mono"],
+                        "display-lg": ["Sora"],
+                        "display-lg-mobile": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0a0a1a;
+            color: #e3e0f8;
+            overflow-x: hidden;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-panel-heavy {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .neon-text-gradient {
+            background: linear-gradient(135deg, #bd00ff, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-primary-glow {
+            background: linear-gradient(135deg, #7189f6, #dcb8ff);
+            box-shadow: 0 0 15px rgba(189, 0, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-glow:hover {
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .card-hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card-hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(189, 0, 255, 0.15);
+            border-color: rgba(189, 0, 255, 0.5);
+        }
+
+        /* Subtle animated background grid */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+        
+        /* Floating animation for hero image */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(189, 0, 255, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(189, 0, 255, 0.5); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 3s infinite;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased relative">
+<!-- Ambient Background Glows -->
+<div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-neon-purple rounded-full mix-blend-screen filter blur-[150px] opacity-20"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-neon-blue rounded-full mix-blend-screen filter blur-[200px] opacity-10"></div>
+<div class="absolute inset-0 bg-grid w-full h-full"></div>
+</div>
+<!-- TopNavBar Component -->
+<nav class="bg-surface-glass backdrop-blur-md fixed top-0 w-full border-b border-glass shadow-[0_0_15px_rgba(102,126,234,0.1)] flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 z-50 transition-all duration-300">
+<div class="flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-transform">
+<img alt="ChurnGuard AI Logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGaQBhw6X1ahXwNy5MBrwIPac5_LG4lBm1XHPY4nSq_1lA3IzvIbBlqct6SnUCXByE09ETjLh-IPbT7o65zn5VP3OMC40PH723vl0MGxpm8oKIHViFBfm5ALXgQ_9SBwSqsiMQc08ye4hgbVg7i22KoZunXz0oqyC-DSL2IW_zf_bbKTsYxyfUU_4h4g-6w7eXYkNgw_kKqN42Oms8grQmixH05CZkg3cVpnlMtUDfnDLq-BVkxPQaN85NwY7O1HxcrHiH-bFJTeU"/>
+<span class="font-display-lg text-headline-md font-bold text-on-surface">ChurnGuard AI</span>
+</div>
+<!-- Desktop Nav -->
+<div class="hidden md:flex items-center gap-8">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 hover:text-neon-blue transition-colors duration-300" href="index.html">Home</a>
+<a class="text-on-surface-variant hover:text-neon-blue transition-colors duration-300" href="predict.html">Predict</a>
+<a class="text-on-surface-variant hover:text-neon-blue transition-colors duration-300" href="analytics.html">Analytics</a>
+<a class="text-on-surface-variant hover:text-neon-blue transition-colors duration-300" href="index.html#about">About</a>
+</div>
+<button class="hidden md:flex items-center justify-center px-6 py-2 rounded-full font-label-caps text-label-caps text-white btn-primary-glow hover:scale-105 active:scale-95 transition-transform">
+            Get Started
+        </button>
+<!-- Mobile Menu Toggle (Visual only for this demo) -->
+<button class="md:hidden text-on-surface hover:text-neon-blue transition-colors">
+<span class="material-symbols-outlined" style="font-size: 28px;">menu</span>
+</button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-[100px] pb-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col gap-24">
+<!-- Hero Section -->
+<section class="flex flex-col lg:flex-row items-center justify-between gap-12 pt-12 lg:pt-24 min-h-[70vh]">
+<!-- Hero Text -->
+<div class="flex-1 flex flex-col gap-6 text-center lg:text-left z-10">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border-glass w-fit mx-auto lg:mx-0 animate-pulse-glow">
+<span class="w-2 h-2 rounded-full bg-neon-blue animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-neon-blue">AI-Powered Predictive Analytics v2.0</span>
+</div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg font-bold leading-tight">
+<span class="neon-text-gradient">Predict Customer Churn</span><br/>
+                    Before It Happens.
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto lg:mx-0">
+                    Harness the power of advanced Machine Learning models to identify at-risk accounts, understand churn drivers, and take proactive action to retain your most valuable customers.
+                </p>
+<div class="flex flex-col sm:flex-row items-center gap-4 mt-4 justify-center lg:justify-start">
+<button class="w-full sm:w-auto px-8 py-3.5 rounded-full font-headline-md text-[16px] text-white btn-primary-glow flex items-center justify-center gap-2">
+                        Start Predicting <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
+</button>
+<button class="w-full sm:w-auto px-8 py-3.5 rounded-full font-headline-md text-[16px] text-on-surface glass-panel hover:bg-surface-variant transition-colors border-glass flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 20px;">play_circle</span> View Demo
+                    </button>
+</div>
+<div class="mt-8 flex items-center gap-4 justify-center lg:justify-start text-on-surface-variant text-sm font-data-mono">
+<div class="flex -space-x-3">
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="A small, circular avatar portrait of a professional woman with glasses, smiling softly, lit by cool blue studio lights, dark background, highly detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwwfsdhd2o1PQKTq_IDCH85ye2rnmF7pXGBDU0t4uNVVJaZPHYPBWxZZ_G04U5Rs92YGhch3FKdmlho1Y6IkxDKfT3Y7MP5X02vFYLSTGtIGpE2_GMunsnr1dkFXqWQoc5vgnkU-eTZqXAxj-GGs-x2lJulEFJmXTkcHccCdbv436b94vCrXxnqFve7noBic6oMsz9cs5MvUYMNloqvQMSCYso6o7wRxHgdkNFOeM9kB2CCDxVMrAhd51F25iclyOiWcqhxEqt8Xc"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="A small, circular avatar portrait of a man in a modern office environment, warm ambient lighting, highly detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBleChKDof3aldPsaDvEEv1zL0esjPhdP-6Lt0EOtry_hnsWlkr0PGP90Lwbr3F3t7o_BKVRUm8Mxh8laLRKk-PDVcwqCFdf_aX1GedJerfwQyQMyQOlVqXewJa2qa9apGHskBYp3p8CPLUWgdY47d1lnaA4AGQTNm44RkreSFSlUXOt2vUW7x3prqMflqxVob3X_ZSgkPerSUid2Xze7MCFp-2b5wZFbE76xaLrt9X6ART2IFCZtCO44PBF1Hecjqd_RS-hq0ZZw"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-lowest object-cover" data-alt="A small, circular avatar portrait of a non-binary professional, creative tech lighting with subtle purple hues, highly detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIifVepJUMcbxMHPbjQTH-y139uk7_HsxT1YRBfPWTqydFDzciWRW2rnEbiI6kDmMc2rWxdPmXz4pa_UateDOeKgWFKsY_GnWTnB9L71nOhGZ0hWzEHigF6NxWEYwjBvTYl-6k8usrLdrVUi9aS3OH5bjMCubhUO3uA4nojJUtPh5QiFEXH0AnKjY6D5vS7ZgXfj1fbzxaT9ZHe9MN03fXkdJeojR9-UpkFLXk03FqloMesjIL0vyWMWyvZu9-YHuI2YlpsXHyxkY"/>
+</div>
+<span>Trusted by 500+ data teams</span>
+</div>
+</div>
+<!-- Hero Image/Mockup (Holographic Dashboard) -->
+<div class="flex-1 relative w-full max-w-lg mx-auto lg:max-w-none animate-float z-10 perspective-1000">
+<div class="relative w-full aspect-square md:aspect-[4/3] rounded-xl glass-panel-heavy p-4 shadow-[0_20px_50px_rgba(189,0,255,0.2)] transform rotate-y-[-5deg] rotate-x-[5deg]">
+<!-- Abstract Dashboard Visualization -->
+<div class="absolute inset-0 bg-gradient-to-br from-[rgba(113,137,246,0.05)] to-[rgba(189,0,255,0.05)] rounded-xl overflow-hidden flex flex-col gap-4 p-4">
+<!-- Top Bar Mockup -->
+<div class="flex justify-between items-center border-b border-glass pb-2">
+<div class="w-1/3 h-2 bg-surface-variant rounded-full"></div>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-danger-pulse"></div>
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<div class="w-2 h-2 rounded-full bg-success-glow"></div>
+</div>
+</div>
+<!-- Main Chart Mockup -->
+<div class="flex-1 relative bg-surface-container-lowest/50 rounded-lg border border-glass flex items-end p-4 gap-2">
+<!-- Faux Bars -->
+<div class="w-full bg-primary/20 h-[30%] rounded-t-sm relative"><div class="absolute top-0 w-full h-[2px] bg-primary shadow-[0_0_8px_#b9c3ff]"></div></div>
+<div class="w-full bg-primary/30 h-[50%] rounded-t-sm relative"><div class="absolute top-0 w-full h-[2px] bg-primary shadow-[0_0_8px_#b9c3ff]"></div></div>
+<div class="w-full bg-danger-pulse/20 h-[80%] rounded-t-sm relative"><div class="absolute top-0 w-full h-[2px] bg-danger-pulse shadow-[0_0_8px_#ff2e63]"></div></div>
+<div class="w-full bg-primary/40 h-[60%] rounded-t-sm relative"><div class="absolute top-0 w-full h-[2px] bg-primary shadow-[0_0_8px_#b9c3ff]"></div></div>
+<div class="w-full bg-primary/50 h-[40%] rounded-t-sm relative"><div class="absolute top-0 w-full h-[2px] bg-primary shadow-[0_0_8px_#b9c3ff]"></div></div>
+<!-- Overlay "Risk" Chip -->
+<div class="absolute top-4 right-4 bg-danger-pulse/20 border border-danger-pulse text-danger-pulse font-label-caps text-[10px] px-2 py-1 rounded-full flex items-center gap-1 backdrop-blur-sm shadow-[0_0_10px_rgba(255,46,99,0.3)]">
+<span class="w-1.5 h-1.5 rounded-full bg-danger-pulse animate-pulse"></span>
+                                 High Risk Alert
+                             </div>
+</div>
+<!-- Bottom Metrics Mockup -->
+<div class="flex gap-4 h-1/4">
+<div class="flex-1 bg-surface-container-lowest/50 rounded-lg border border-glass p-3 flex flex-col justify-center">
+<div class="w-1/2 h-1.5 bg-surface-variant rounded-full mb-2"></div>
+<div class="w-3/4 h-3 bg-neon-blue/70 rounded-full"></div>
+</div>
+<div class="flex-1 bg-surface-container-lowest/50 rounded-lg border border-glass p-3 flex flex-col justify-center">
+<div class="w-1/2 h-1.5 bg-surface-variant rounded-full mb-2"></div>
+<div class="w-3/4 h-3 bg-neon-purple/70 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section (Bento Style) -->
+<section class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 z-10">
+<!-- Stat Card 1 -->
+<div class="glass-panel p-6 rounded-xl border-glass flex flex-col items-center justify-center text-center gap-2 card-hover-lift">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(113,137,246,0.2)]">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px; font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h3 class="font-display-lg-mobile text-headline-md font-bold text-on-surface">96.2%</h3>
+<p class="font-data-mono text-data-mono text-primary">Prediction Accuracy</p>
+</div>
+<!-- Stat Card 2 -->
+<div class="glass-panel p-6 rounded-xl border-glass flex flex-col items-center justify-center text-center gap-2 card-hover-lift">
+<div class="w-12 h-12 rounded-full bg-success-glow/20 flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(0,255,163,0.2)]">
+<span class="material-symbols-outlined text-success-glow" style="font-size: 24px; font-variation-settings: 'FILL' 1;">trending_down</span>
+</div>
+<h3 class="font-display-lg-mobile text-headline-md font-bold text-on-surface">23%</h3>
+<p class="font-data-mono text-data-mono text-success-glow">Average Churn Reduction</p>
+</div>
+<!-- Stat Card 3 -->
+<div class="glass-panel p-6 rounded-xl border-glass flex flex-col items-center justify-center text-center gap-2 card-hover-lift">
+<div class="w-12 h-12 rounded-full bg-neon-purple/20 flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(189,0,255,0.2)]">
+<span class="material-symbols-outlined text-neon-purple" style="font-size: 24px; font-variation-settings: 'FILL' 1;">database</span>
+</div>
+<h3 class="font-display-lg-mobile text-headline-md font-bold text-on-surface">50K+</h3>
+<p class="font-data-mono text-data-mono text-secondary">Daily Predictions</p>
+</div>
+<!-- Stat Card 4 -->
+<div class="glass-panel p-6 rounded-xl border-glass flex flex-col items-center justify-center text-center gap-2 card-hover-lift">
+<div class="w-12 h-12 rounded-full bg-neon-blue/20 flex items-center justify-center mb-2 shadow-[0_0_15px_rgba(0,210,255,0.2)]">
+<span class="material-symbols-outlined text-neon-blue" style="font-size: 24px; font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+<h3 class="font-display-lg-mobile text-headline-md font-bold text-on-surface">3</h3>
+<p class="font-data-mono text-data-mono text-neon-blue">Core ML Models</p>
+</div>
+</section>
+<!-- Features Section -->
+<section class="flex flex-col gap-12 z-10 pt-12">
+<div class="text-center flex flex-col gap-4">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-[40px] font-bold text-on-surface">Enterprise-Grade Intelligence</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Deep integrations, transparent explainability, and real-time processing tailored for complex B2B data ecosystems.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Feature 1 -->
+<div class="glass-panel p-8 rounded-2xl border-glass flex flex-col gap-4 card-hover-lift group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/10 rounded-full blur-3xl group-hover:bg-primary-container/20 transition-colors"></div>
+<div class="w-14 h-14 rounded-xl bg-surface-container flex items-center justify-center border border-glass shadow-inner">
+<span class="material-symbols-outlined text-primary" style="font-size: 28px;">psychology</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Multi-Model Machine Learning</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">We utilize an ensemble approach combining Random Forests, XGBoost, and Deep Neural Networks to ensure the highest possible prediction accuracy tailored to your specific dataset characteristics.</p>
+</div>
+<!-- Feature 2 -->
+<div class="glass-panel p-8 rounded-2xl border-glass flex flex-col gap-4 card-hover-lift group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-neon-purple/10 rounded-full blur-3xl group-hover:bg-neon-purple/20 transition-colors"></div>
+<div class="w-14 h-14 rounded-xl bg-surface-container flex items-center justify-center border border-glass shadow-inner">
+<span class="material-symbols-outlined text-neon-purple" style="font-size: 28px;">search_insights</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">SHAP Explainability</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Never trust a black box. Our platform uses SHAP (SHapley Additive exPlanations) values to break down exactly which features contributed to a specific customer's churn risk score.</p>
+</div>
+<!-- Feature 3 -->
+<div class="glass-panel p-8 rounded-2xl border-glass flex flex-col gap-4 card-hover-lift group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-neon-blue/10 rounded-full blur-3xl group-hover:bg-neon-blue/20 transition-colors"></div>
+<div class="w-14 h-14 rounded-xl bg-surface-container flex items-center justify-center border border-glass shadow-inner">
+<span class="material-symbols-outlined text-neon-blue" style="font-size: 28px;">bolt</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Real-Time Predictions</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Stream usage data directly via our API for sub-second risk re-evaluations. Catch signs of disengagement the moment they happen, allowing your success team to intervene immediately.</p>
+</div>
+<!-- Feature 4 -->
+<div class="glass-panel p-8 rounded-2xl border-glass flex flex-col gap-4 card-hover-lift group relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-tertiary/10 rounded-full blur-3xl group-hover:bg-tertiary/20 transition-colors"></div>
+<div class="w-14 h-14 rounded-xl bg-surface-container flex items-center justify-center border border-glass shadow-inner">
+<span class="material-symbols-outlined text-tertiary" style="font-size: 28px;">bar_chart</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Power BI &amp; Tableau Integrations</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Push predictive scores and insights directly into your existing reporting infrastructure. Empower your executive team with predictive dashboards without learning a new tool.</p>
+</div>
+</div>
+</section>
+<!-- How It Works (Linear Flow) -->
+<section class="flex flex-col gap-12 z-10 pt-12">
+<div class="text-center">
+<h2 class="font-display-lg-mobile md:font-display-lg text-[32px] md:text-[40px] font-bold text-on-surface">From Raw Data to Retention Strategy</h2>
+</div>
+<div class="relative w-full py-8">
+<!-- Connecting Line (Desktop) -->
+<div class="hidden md:block absolute top-1/2 left-[10%] right-[10%] h-[2px] bg-gradient-to-r from-surface-variant via-primary to-neon-purple -translate-y-1/2 z-0 opacity-50"></div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4 relative z-10">
+<!-- Step 1 -->
+<div class="flex flex-col items-center text-center gap-4 group">
+<div class="w-16 h-16 rounded-full glass-panel-heavy border-glass flex items-center justify-center relative shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:border-primary transition-colors">
+<div class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-surface-bright border border-glass flex items-center justify-center font-label-caps text-[10px] text-on-surface font-bold">1</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" style="font-size: 24px;">upload_file</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] font-bold text-on-surface mb-1">Upload Data</h4>
+<p class="font-body-md text-[14px] text-on-surface-variant">Connect CRM, billing, and product usage logs securely.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center text-center gap-4 group">
+<div class="w-16 h-16 rounded-full glass-panel-heavy border-glass flex items-center justify-center relative shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:border-neon-blue transition-colors">
+<div class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-surface-bright border border-glass flex items-center justify-center font-label-caps text-[10px] text-on-surface font-bold">2</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-neon-blue transition-colors" style="font-size: 24px;">settings_b_roll</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] font-bold text-on-surface mb-1">Feature Engineering</h4>
+<p class="font-body-md text-[14px] text-on-surface-variant">Auto-extract relevant behavioral signals and anomalies.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center text-center gap-4 group">
+<div class="w-16 h-16 rounded-full glass-panel-heavy border-glass flex items-center justify-center relative shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:border-neon-purple transition-colors">
+<div class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-surface-bright border border-glass flex items-center justify-center font-label-caps text-[10px] text-on-surface font-bold">3</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-neon-purple transition-colors" style="font-size: 24px;">model_training</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] font-bold text-on-surface mb-1">Model Training</h4>
+<p class="font-body-md text-[14px] text-on-surface-variant">Train custom ensemble models on your historical churn.</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center text-center gap-4 group">
+<div class="w-16 h-16 rounded-full glass-panel-heavy border-glass flex items-center justify-center relative shadow-[0_0_20px_rgba(189,0,255,0.2)] border-neon-purple transition-colors">
+<div class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-neon-purple flex items-center justify-center font-label-caps text-[10px] text-white font-bold shadow-[0_0_10px_#bd00ff]">4</div>
+<span class="material-symbols-outlined text-neon-purple" style="font-size: 24px;">lightbulb</span>
+</div>
+<div>
+<h4 class="font-headline-md text-[18px] font-bold text-on-surface mb-1">Get Insights</h4>
+<p class="font-body-md text-[14px] text-on-surface-variant">Actionable risk scores and driver analyses delivered.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA Banner -->
+<section class="glass-panel p-8 md:p-12 rounded-2xl border-glass flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden z-10 mt-12">
+<!-- Background effects for CTA -->
+<div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-neon-purple/10"></div>
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-neon-purple rounded-full mix-blend-screen filter blur-[80px] opacity-30"></div>
+<div class="relative z-10 text-center md:text-left flex-1">
+<h2 class="font-display-lg-mobile text-[32px] font-bold text-on-surface mb-2">Stop guessing. Start retaining.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Join data-driven teams using ChurnGuard AI to protect their ARR.</p>
+</div>
+<div class="relative z-10 w-full md:w-auto">
+<button class="w-full md:w-auto px-8 py-4 rounded-full font-headline-md text-[16px] text-white btn-primary-glow flex items-center justify-center gap-2 whitespace-nowrap">
+                    Request Enterprise Trial <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="bg-surface-container-lowest border-t border-glass flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop w-full py-12 relative z-50">
+<div class="flex items-center gap-2 mb-6 md:mb-0">
+<img alt="ChurnGuard AI Logo Mark" class="h-6 w-auto opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGaQBhw6X1ahXwNy5MBrwIPac5_LG4lBm1XHPY4nSq_1lA3IzvIbBlqct6SnUCXByE09ETjLh-IPbT7o65zn5VP3OMC40PH723vl0MGxpm8oKIHViFBfm5ALXgQ_9SBwSqsiMQc08ye4hgbVg7i22KoZunXz0oqyC-DSL2IW_zf_bbKTsYxyfUU_4h4g-6w7eXYkNgw_kKqN42Oms8grQmixH05CZkg3cVpnlMtUDfnDLq-BVkxPQaN85NwY7O1HxcrHiH-bFJTeU"/>
+<span class="font-headline-md text-[16px] font-bold text-on-surface opacity-80">ChurnGuard AI</span>
+</div>
+<div class="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
+<a class="font-data-mono text-data-mono text-outline hover:text-primary transition-colors hover:opacity-80" href="#">Privacy Policy</a>
+<a class="font-data-mono text-data-mono text-outline hover:text-primary transition-colors hover:opacity-80" href="#">Terms of Service</a>
+<a class="font-data-mono text-data-mono text-outline hover:text-primary transition-colors hover:opacity-80" href="#">Contact</a>
+</div>
+<div class="font-data-mono text-data-mono text-outline opacity-60">
+            Built with ❤️ by Rupesh
+        </div>
+</footer>
+</body></html>
