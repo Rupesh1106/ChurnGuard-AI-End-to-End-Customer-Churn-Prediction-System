@@ -1,0 +1,60 @@
+# ChurnGuard AI - Project Configuration
+
+project:
+  name: ChurnGuard AI
+  version: 1.0.0
+  description: End-to-End Customer Churn Prediction System
+
+data:
+  raw_path: data/raw/
+  processed_path: data/processed/
+  target_column: Churn
+  test_size: 0.2
+  random_state: 42
+
+features:
+  categorical:
+    - gender
+    - SeniorCitizen
+    - Partner
+    - Dependents
+    - PhoneService
+    - MultipleLines
+    - InternetService
+    - OnlineSecurity
+    - OnlineBackup
+    - DeviceProtection
+    - TechSupport
+    - StreamingTV
+    - StreamingMovies
+    - Contract
+    - PaperlessBilling
+    - PaymentMethod
+  numerical:
+    - tenure
+    - MonthlyCharges
+    - TotalCharges
+
+models:
+  xgboost:
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    eval_metric: logloss
+  random_forest:
+    n_estimators: 200
+    max_depth: 10
+    min_samples_split: 5
+    min_samples_leaf: 2
+  logistic_regression:
+    C: 1.0
+    max_iter: 1000
+    solver: lbfgs
+
+streamlit:
+  page_title: ChurnGuard AI - Churn Predictor
+  page_icon: 🛡️
+  layout: wide
+  theme: dark

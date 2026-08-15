@@ -1,0 +1,59 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Data files (large datasets)
+data/raw/*.csv
+data/raw/*.xlsx
+data/processed/*.csv
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Model files (large binaries)
+models/*.pkl
+models/*.joblib
+models/*.h5
+!models/.gitkeep
+
+# Power BI temp files
+*.pbix.tmp
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Coverage reports
+htmlcov/
+.coverage
